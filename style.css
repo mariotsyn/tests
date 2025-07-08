@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+}
+
+#toolbar {
+  display: flex;
+  align-items: center;
+  background: #333;
+  color: #fff;
+  padding: 0.5rem 1rem;
+}
+
+#toolbar input,
+#toolbar select,
+#palette button {
+  margin-right: 1rem;
+}
+
+#palette button {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#workspace {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#pdfCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+#overlay,
+#linkLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.device {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.label {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 2px 4px;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.selected {
+  outline: 2px dashed red;
+}
+
+svg line {
+  stroke-width: 2;
+}
