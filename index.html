@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diseño de Red</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+  <h1>Aplicación de planos de red</h1>
+  <input type="file" id="pdfUploader" accept="application/pdf">
+
+  <div id="palette">
+    <button onclick="addIcon('router')">Router</button>
+    <button onclick="addIcon('switch')">Switch</button>
+    <button onclick="addIcon('ap')">AP</button>
+    <button onclick="addIcon('camera')">Cámara</button>
+    <button onclick="addIcon('ctrl')">Controladora</button>
+  </div>
+
+  <div>
+    <label for="cableType">Tipo de cable:</label>
+    <select id="cableType">
+      <option value="utp">UTP</option>
+      <option value="fibra">Fibra</option>
+      <option value="coax">Coaxial</option>
+    </select>
+  </div>
+
+  <div id="workspace">
+    <canvas id="pdfCanvas"></canvas>
+    <svg id="linkLayer"></svg>
+    <div id="overlay"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
