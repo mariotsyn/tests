@@ -2,7 +2,17 @@ const pdfCanvas = document.getElementById('pdfCanvas');
 const ctx = pdfCanvas.getContext('2d');
 const overlay = document.getElementById('overlay');
 const linkLayer = document.getElementById('linkLayer');
+const modeSelect = document.getElementById('mode');
+const pdfUploader = document.getElementById('pdfUploader');
+document.querySelectorAll('#palette button').forEach(btn => {
+  btn.addEventListener('click', () => addIcon(btn.dataset.type));
+});
+let mode = modeSelect.value;
 let startIcon = null;
+
+modeSelect.addEventListener('change', () => {
+  mode = modeSelect.value;
+});
 
 // Cargar PDF en el canvas
 pdfUploader.addEventListener('change', async (e) => {
@@ -18,16 +28,26 @@ pdfUploader.addEventListener('change', async (e) => {
 });
 
 function addIcon(type) {
+  if (mode !== 'add') return;
+  const dev = document.createElement('div');
+  dev.className = 'device';
+  dev.style.left = '10px';
+  dev.style.top = '10px';
+  dev.draggable = true;
+
   const img = document.createElement('img');
   img.className = 'icon';
   img.src = getIcon(type);
-  img.style.left = '10px';
-  img.style.top = '10px';
-  img.draggable = true;
-  overlay.appendChild(img);
-  img.addEventListener('dragstart', dragStart);
-  img.addEventListener('dragend', dragEnd);
-  img.addEventListener('click', iconClick);
+  dev.appendChild(img);
+
+  const label = document.createElement('div');
+  label.className = 'label';
+  dev.appendChild(label);
+
+  overlay.appendChild(dev);
+  dev.addEventListener('dragstart', dragStart);
+  dev.addEventListener('dragend', dragEnd);
+  dev.addEventListener('click', iconClick);
 }
 
 function getIcon(type) {
@@ -48,26 +68,45 @@ function getIcon(type) {
 }
 
 function dragStart(e) {
+  if (mode !== 'select') {
+    e.preventDefault();
+    return;
+  }
   e.dataTransfer.setData('text/plain', '');
 }
 
 function dragEnd(e) {
+  if (mode !== 'select') return;
   const rect = overlay.getBoundingClientRect();
   this.style.left = e.clientX - rect.left - 16 + 'px';
   this.style.top = e.clientY - rect.top - 16 + 'px';
 }
 
 function iconClick(e) {
-  if (startIcon === null) {
-    startIcon = this;
-    this.classList.add('selected');
-  } else if (startIcon === this) {
-    startIcon.classList.remove('selected');
-    startIcon = null;
+  if (mode === 'select') {
+    const name = prompt('Nombre', this.dataset.name || '');
+    if (name !== null) {
+      this.dataset.name = name;
+      this.querySelector('.label').textContent = name;
+    }
+    const ip = prompt('IP', this.dataset.ip || '');
+    if (ip !== null) this.dataset.ip = ip;
+    const mac = prompt('MAC', this.dataset.mac || '');
+    if (mac !== null) this.dataset.mac = mac;
+    const inv = prompt('Inventario', this.dataset.inv || '');
+    if (inv !== null) this.dataset.inv = inv;
   } else {
-    connect(startIcon, this);
-    startIcon.classList.remove('selected');
-    startIcon = null;
+    if (startIcon === null) {
+      startIcon = this;
+      this.classList.add('selected');
+    } else if (startIcon === this) {
+      startIcon.classList.remove('selected');
+      startIcon = null;
+    } else {
+      connect(startIcon, this);
+      startIcon.classList.remove('selected');
+      startIcon = null;
+    }
   }
 }
 
@@ -75,10 +114,10 @@ function connect(a, b) {
   const cable = document.getElementById('cableType').value;
   const colors = { utp: 'blue', fibra: 'red', coax: 'green' };
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-  line.setAttribute('x1', parseInt(a.style.left) + 16);
-  line.setAttribute('y1', parseInt(a.style.top) + 16);
-  line.setAttribute('x2', parseInt(b.style.left) + 16);
-  line.setAttribute('y2', parseInt(b.style.top) + 16);
+  line.setAttribute('x1', parseInt(a.style.left) + a.offsetWidth / 2);
+  line.setAttribute('y1', parseInt(a.style.top) + a.offsetHeight / 2);
+  line.setAttribute('x2', parseInt(b.style.left) + b.offsetWidth / 2);
+  line.setAttribute('y2', parseInt(b.style.top) + b.offsetHeight / 2);
   line.setAttribute('stroke', colors[cable] || 'black');
   linkLayer.appendChild(line);
 }
