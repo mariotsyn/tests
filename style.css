@@ -1,0 +1,52 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 2rem;
+}
+
+h1 {
+  color: #333;
+}
+
+#palette button {
+  margin-right: 0.5rem;
+}
+
+#workspace {
+  position: relative;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  margin-top: 1rem;
+}
+
+#pdfCanvas {
+  width: 100%;
+  height: 100%;
+}
+
+#overlay,
+#linkLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.icon {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  cursor: move;
+}
+
+.selected {
+  outline: 2px dashed red;
+}
+
+svg line {
+  stroke-width: 2;
+}
